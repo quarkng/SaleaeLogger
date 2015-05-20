@@ -1,0 +1,38 @@
+﻿<Window x:Class="SaleaeLogger.MainWindow"
+        xmlns:local="clr-namespace:SaleaeLogger"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Saleae Logger" Height="600" Width="525"
+        Closed="Window_Closed">
+
+    <Window.DataContext>
+        <local:MainWindowViewModel x:Name="vm"/>
+    </Window.DataContext>
+
+    <Grid>
+        
+        <DockPanel>
+            <Button DockPanel.Dock="Top" Content="Connect" Click="Connect_Click" Margin="10"/>
+
+            <DockPanel DockPanel.Dock="Top" Margin="10">
+                <Label DockPanel.Dock="Left" Content="Seconds to scan:"/>
+                <TextBox DockPanel.Dock="Left" Text="{Binding ScanSeconds}" Width="50" HorizontalContentAlignment="Center"/>
+                <Label DockPanel.Dock="Left" Content="Seconds each burst:"/>
+                <TextBox DockPanel.Dock="Left" Text="{Binding BurstSeconds}" Width="50" HorizontalContentAlignment="Center"/>
+                <Button DockPanel.Dock="Top" Content="Start Logging" Click="StartLogging_Click" Margin="10,0" IsEnabled="{Binding HasConnection}"/>
+                
+            </DockPanel>
+
+
+            <Button DockPanel.Dock="Bottom" Content="Stop Logging" Click="StopLogging_Click" Margin="10"/>
+
+            <ScrollViewer x:Name="scrollMonitor" Margin="10">
+                    <TextBlock x:Name="tbMonitor" TextWrapping="Wrap" Text="" FontSize="10"
+                               ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Auto"
+                               ScrollViewer.CanContentScroll="True"/>
+            </ScrollViewer>
+            
+        </DockPanel>
+        
+    </Grid>
+</Window>

@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.31101.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SaleaeLogger", "SaleaeLogger\SaleaeLogger.csproj", "{97BE4CE0-ADFE-47AF-B291-E72B4016F987}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SaleaeAutomationApi", "SaleaeAutomationApi\SaleaeAutomationApi.csproj", "{95F25CA4-F9B2-486C-9F8D-AE49756682DC}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{97BE4CE0-ADFE-47AF-B291-E72B4016F987}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{97BE4CE0-ADFE-47AF-B291-E72B4016F987}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{97BE4CE0-ADFE-47AF-B291-E72B4016F987}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{97BE4CE0-ADFE-47AF-B291-E72B4016F987}.Release|Any CPU.Build.0 = Release|Any CPU
+		{95F25CA4-F9B2-486C-9F8D-AE49756682DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{95F25CA4-F9B2-486C-9F8D-AE49756682DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{95F25CA4-F9B2-486C-9F8D-AE49756682DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{95F25CA4-F9B2-486C-9F8D-AE49756682DC}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

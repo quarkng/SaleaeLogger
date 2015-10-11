@@ -6,3 +6,8 @@ First you must set up your Logic software to enable the "scripting socket server
 This program will trigger the Logic software to start a new capture as soon as possible when the previous capture ends.  The data will be saved as separete files under C:\_LogicData.  There will be gaps of time where no samples are taken, but it is better than nothing.
 
 One major advantage this have over traditional data loggers is that the sample rate is very high.
+
+<hr>
+
+Note that code in SaleaeAutomationApi  is based on
+http://support.saleae.com/hc/en-us/articles/201104764

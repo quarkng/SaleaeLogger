@@ -50,7 +50,7 @@ namespace SaleaeLogger
         {
             Thread.CurrentThread.Name = "LoggingScanThread";
 
-            saleae.SetActiveChannels(null, new int[] { 0, 1, 2, 3 });
+            saleae.SetActiveChannels(null, new int[] { 0, 1, 2, 3, 4, 5, 6 });
 
             // **** Turn off all triggers ****
             SaleaeAutomationApi.Trigger[] t = new SaleaeAutomationApi.Trigger[8];
@@ -62,7 +62,10 @@ namespace SaleaeLogger
 
             // **** Use lowest analog sample rate possible ****
             var sampRates = saleae.GetAvailableSampleRates();
-            var minAnaRate = (from r in sampRates select r.AnalogSampleRate).Min();
+            int minSampleRateDesired = 100; // Hz
+            var minAnaRate = (from r in sampRates where r.AnalogSampleRate >= minSampleRateDesired
+                              select r.AnalogSampleRate).Min();
+
             var rateStruct = (from r in sampRates where r.AnalogSampleRate == minAnaRate select r).First();
             saleae.SetSampleRate(rateStruct);
             var rate = (rateStruct.DigitalSampleRate > 0) ? (rateStruct.DigitalSampleRate) : (rateStruct.AnalogSampleRate);

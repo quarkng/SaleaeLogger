@@ -29,7 +29,7 @@ namespace SaleaeLogger
         public MainWindowViewModel()
         {
             ScanSeconds = 1800;
-            BurstSeconds = 15;
+            BurstSeconds = 5;
         }
         
         public void Connect(EventHandler<SaleaeStringEventArgs> saleaeApiMonitor = null,

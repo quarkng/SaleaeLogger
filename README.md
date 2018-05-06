@@ -1,3 +1,8 @@
+NEWS: Coming soon!
+https://github.com/quarkng/SaleaeApiUi
+
+----------
+
 #Use the Saleae Logic (Gen 2) Pod as a data logger
 A data logger allows you to log analog signals over long periods of time.  The Saleae Logic software will crash if you capture so many samples that it overruns the physical memory of your computer.  This software provides a compromise.
 

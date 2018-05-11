@@ -26,8 +26,6 @@ namespace SaleaeLogger
 
         DateTime connectedTime = DateTime.Now;
 
-
-
         public MainWindow()
         {
             InitializeComponent();
@@ -37,8 +35,6 @@ namespace SaleaeLogger
         {
             Application.Current.Shutdown();
         }
-
-
 
         private void Connect_Click(object sender, RoutedEventArgs e)
         {
@@ -65,8 +61,6 @@ namespace SaleaeLogger
             tbMonitor.Inlines.Add(new Run("Stop Logging Requested\n") { Foreground = Brushes.Crimson, Background = Brushes.Yellow });
         }
 
-
-
         private void SaleaeEventHandler(Object sender, SaleaeStringEventArgs e)
         {
             this.Dispatcher.BeginInvoke(DispatcherPriority.Normal,
@@ -75,6 +69,7 @@ namespace SaleaeLogger
                     DispatchedSaleaeEventHandler(e);
                 });
         }
+
         private void DispatchedSaleaeEventHandler(SaleaeStringEventArgs e)
         {
             if (e is SeleaeWriteEventArgs)
@@ -95,8 +90,6 @@ namespace SaleaeLogger
             scrollMonitor.ScrollToBottom();
         }
 
-
-
         private void LoggingEventHandler(Object sender, LoggingEventArgs e)
         {
             this.Dispatcher.BeginInvoke(DispatcherPriority.Normal,
@@ -105,6 +98,7 @@ namespace SaleaeLogger
                 DispatchedLoggingEventHandler(e);
             });
         }
+
         private void DispatchedLoggingEventHandler(LoggingEventArgs e)
         {
             if (e is LoggingFileEventArgs)
@@ -120,6 +114,16 @@ namespace SaleaeLogger
             }
 
             scrollMonitor.ScrollToBottom();
+        }
+
+        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+
+        }
+
+        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
         }
     }
 }

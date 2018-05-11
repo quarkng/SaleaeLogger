@@ -40,6 +40,9 @@ namespace SaleaeAutomationApi
         const String set_performance_cmd = "SET_PERFORMANCE";
         const String get_performance_cmd = "GET_PERFORMANCE";
 
+        const String is_processing_complete_cmd = "IS_PROCESSING_COMPLETE";
+        const String is_analyzer_complete_cmd = "IS_ANALYZER_COMPLETE";
+
         public SocketAPI(String host_str = "127.0.0.1", int port_input = 10429)
         {
             this.port = port_input;
@@ -109,13 +112,13 @@ namespace SaleaeAutomationApi
                 if (triggers[i] == Trigger.None)
                     export_command += ", ";
                 else if (triggers[i] == Trigger.High)
-                    export_command += ", high";
+                    export_command += ", HIGH";
                 else if (triggers[i] == Trigger.Low)
-                    export_command += ", low";
+                    export_command += ", LOW";
                 else if (triggers[i] == Trigger.Posedge)
-                    export_command += ", posedge";
+                    export_command += ", POSEDGE";
                 else if (triggers[i] == Trigger.Negedge)
-                    export_command += ", negedge";
+                    export_command += ", NEGEDGE";
             }
 
             WriteString(export_command);
@@ -608,6 +611,64 @@ namespace SaleaeAutomationApi
 
             String response = "";
             GetResponse(ref response);
+        }
+
+        /// <summary>
+        /// Get whether or not the software is done processing data. You must wait for data to be finished processing before you can export/save. 
+        /// </summary>
+        /// <returns>A boolean indicating if processing is complete</returns>
+
+        public bool IsProcessingComplete()
+        {
+            String export_command = is_processing_complete_cmd;
+            WriteString(export_command);
+
+            String response = "";
+            GetResponse(ref response);
+
+            bool complete_processing = Convert.ToBoolean(response.Split('\n')[0]);
+            return complete_processing;
+        }
+
+        /// <summary>
+        /// Get whether or not the software is done processing data. You must wait for data to be finished processing before you can export/save. 
+        /// </summary>
+        /// <returns>A boolean indicating if processing is complete</returns>
+
+        public bool IsAnalyzerProcessingComplete(int index)
+        {
+            String export_command = is_analyzer_complete_cmd;
+            export_command += ", " + Convert.ToString(index);
+            WriteString(export_command);
+
+            String response = "";
+            GetResponse(ref response);
+
+            bool complete_processing = Convert.ToBoolean(response.Split('\n')[0]);
+            return complete_processing;
+        }
+
+        /// <summary>
+        /// Calls IsProcessingComplete every 250 ms.
+        /// </summary>
+        /// <param name="client"></param>
+        /// <param name="timeout"></param>
+        /// <returns></returns>
+        public bool BlockUntillProcessingCompleteOrTimeout(TimeSpan timeout)
+        {
+            DateTime processing_timeout = DateTime.Now.Add(timeout);
+            bool processing_finished = false;
+            do
+            {
+
+                processing_finished = IsProcessingComplete();
+
+                if (!processing_finished)
+                    System.Threading.Thread.Sleep(250);
+            }
+            while (!processing_finished && DateTime.Now < processing_timeout);
+
+            return processing_finished;
         }
 
     }

@@ -28,8 +28,7 @@ namespace SaleaeLogger
 
         public MainWindowViewModel()
         {
-            ScanSeconds = 1800;
-            BurstSeconds = 5;
+
         }
         
         public void Connect(EventHandler<SaleaeStringEventArgs> saleaeApiMonitor = null,
@@ -76,24 +75,12 @@ namespace SaleaeLogger
                 return;
             }
 
+            if(BurstSeconds < 1)
+            {
+                BurstSeconds = 1;
+            }
+
             StopScan();
-
-            if (ScanSeconds < 1)
-            {
-                ScanSeconds = 1;
-                OnPropertyChanged("ScanSec");
-            }
-
-            if(BurstSeconds < 5)
-            {
-                BurstSeconds = 5;
-                OnPropertyChanged("BurstSeconds");
-            }
-            else if( BurstSeconds > 120 )
-            {
-                BurstSeconds = 120;
-                OnPropertyChanged("BurstSeconds");
-            }
 
             logger = new LoggingThread(saleae, ScanSeconds, BurstSeconds, CallerLoggingEventHandler);
             logger.StartScan();

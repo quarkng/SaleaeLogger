@@ -50,27 +50,29 @@ namespace SaleaeLogger
         {
             Thread.CurrentThread.Name = "LoggingScanThread";
 
-            saleae.SetActiveChannels(null, new int[] { 0, 1, 2, 3, 4, 5, 6 });
+            int[] chans = { 0, 1, 2, 3, 4, 5 };
+            int numchans = chans.Length;
+            int numsamples = 4000000;
+
+            saleae.SetActiveChannels(chans, null); //digital chans, analog chans
 
             // **** Turn off all triggers ****
-            SaleaeAutomationApi.Trigger[] t = new SaleaeAutomationApi.Trigger[8];
-            for (int i = 0; i < t.Length; i++)
+            SaleaeAutomationApi.Trigger[] t = new SaleaeAutomationApi.Trigger[numchans];
+            for (int i = 0; i < numchans; i++)
             {
                 t[i] = SaleaeAutomationApi.Trigger.None;
             }
-            //saleae.SetTrigger(t);
+            t[5] = SaleaeAutomationApi.Trigger.Posedge;
+
+            // Set up trigger
+            saleae.SetTrigger(t);
 
             // **** Use lowest analog sample rate possible ****
             var sampRates = saleae.GetAvailableSampleRates();
-            int minSampleRateDesired = 100; // Hz
-            var minAnaRate = (from r in sampRates where r.AnalogSampleRate >= minSampleRateDesired
-                              select r.AnalogSampleRate).Min();
+            if (sampRates.Any(x => x.DigitalSampleRate == 4000000))
+                saleae.SetSampleRate(sampRates.First(x => x.DigitalSampleRate == 4000000));
 
-            var rateStruct = (from r in sampRates where r.AnalogSampleRate == minAnaRate select r).First();
-            saleae.SetSampleRate(rateStruct);
-            var rate = (rateStruct.DigitalSampleRate > 0) ? (rateStruct.DigitalSampleRate) : (rateStruct.AnalogSampleRate);
-
-            saleae.SetNumSamples(BurstSeconds * rate);
+            saleae.SetNumSamples(BurstSeconds * 4000000);
 
             // **** Do the data logging ****
             DateTime started = DateTime.Now;
@@ -85,26 +87,27 @@ namespace SaleaeLogger
             }
 
             indxWriter = new LoggingIndexWriter(Register);
-            OnLoggingEvent(new LoggingStartedEventArgs(saveFolder));
-            while (DateTime.Now.Subtract(started).TotalSeconds < seconds)
+            
+            while (!canTok.IsCancellationRequested)
             {
-                if (canTok.IsCancellationRequested)
-                {   // Cancel me!
-                    break;
-                }
 
-                double remain = seconds - DateTime.Now.Subtract(started).TotalSeconds;
-                if (remain < BurstSeconds)
-                {   // Remaining time is less than burst time
-                    saleae.SetNumSamples((int)(remain * rate));
-                }
-
+                OnLoggingEvent(new LoggingStartedEventArgs(saveFolder));
                 TimeSpan scanTime = DateTime.Now.Subtract(started);
                 string filename = System.IO.Path.Combine(saveFolder, "data" + scanTime.TotalSeconds.ToString("00000") + ".logicdata");
                 saleae.CaptureToFile(filename);
                 OnLoggingEvent(new LoggingFileEventArgs(filename, scanTime));
+
+                while(!saleae.IsProcessingComplete())
+                {
+                    if (canTok.IsCancellationRequested)
+                    {   // Cancel me!
+                        break;
+                    }
+                }
+
+                OnLoggingEvent(new LoggingStoppedEventArgs());
             }
-            OnLoggingEvent(new LoggingStoppedEventArgs());
+
         }
 
         private void Register(EventHandler<LoggingEventArgs> handler)
